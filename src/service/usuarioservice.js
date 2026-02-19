@@ -2,6 +2,9 @@ import { UsuarioRepository } from "../repositories/userrepository.js";
 import { Usuario } from "../models/usuarios.js";
 import { AppError } from "../Errors/errorHandle.js";
 import bcrypt from "bcryptjs";
+import jwt from 'jsonwebtoken'
+import { JWT_SECRET } from "../config/envconfig.js";
+
 
 export class usuarioService {
     static async ExibirUsuarios() {
@@ -63,7 +66,13 @@ export class usuarioService {
             throw new AppError('Credenciais Invalidas',401)
         }
 
-        return passwordCheck
+        const token = jwt.sign(
+            { id: usuario.id },
+            JWT_SECRET,
+            { expiresIn: '1h'}
+        )
+
+        return {token}
 
     }
 
@@ -103,4 +112,20 @@ export class usuarioService {
             return usuarioAtualizado
     }
 
-}
+    static async delete(id) {
+        if (isNaN(id)) {
+            throw new AppError('ID precisa ser um numero',400)
+        }
+
+        const usuario = await UsuarioRepository.BuscarporId(parseInt(id))
+        const deleted = await UsuarioRepository.excluirUsuario(id)
+
+        if (!usuario || !deleted) {
+            throw new AppError('Usuario nao encontrado',404)
+        }
+
+        return
+
+       }
+    }
+

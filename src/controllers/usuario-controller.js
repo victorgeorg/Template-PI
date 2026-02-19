@@ -2,6 +2,7 @@ import { UsuarioRepository } from "../repositories/userrepository.js";
 import { Usuario } from "../models/usuarios.js";
 import { usuarioService } from "../service/usuarioservice.js";
 
+
 export class UsuarioController {
 
     static async index(req, res) {
@@ -31,38 +32,26 @@ export class UsuarioController {
 
     static async login(req,res) {
         const {email,senha} = req.body
-        await usuarioService.login(email,senha)
+        const { token } = await usuarioService.login(email,senha)
      
-        res.status(200).json({message: 'Usuario logado com sucesso'})
+        res.status(200).json({ token })
     }
 
     static async update(req, res) {
-        const id = parseInt(req.params.id);
+        const id = req.params.id
         const { nome, email, senha } = req.body;
 
-       
-            const usuarioDados = new Usuario(id, nome, email, senha);
-            const usuarioAtualizado = await UsuarioRepository.atualizarUsuario(id, usuarioDados);
+        const usuarioAtualizado = await usuarioService.update(id,nome,email,senha)
 
-            if (!usuarioAtualizado) {
-                return res.status(404).json({ error: 'Usuário não encontrado para atualizar' });
-            }
-
-            res.status(200).json(usuarioAtualizado);
-       
+        res.status(200).json(usuarioAtualizado);
     }
 
     static async delete(req, res) {
         const id = parseInt(req.params.id);
+        
+        await usuarioService.delete(id)
 
-      
-            const excluido = await UsuarioRepository.excluirUsuario(id);
-
-            if (!excluido) {
-                return res.status(404).json({ error: 'Usuário não encontrado para exclusão' });
-            }
-
-            res.status(200).json({ message: 'Usuário removido com sucesso' });
+         res.status(200).send();
       
     }
 
