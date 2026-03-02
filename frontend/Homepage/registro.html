@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro - Arcade Retro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="center-screen">
+
+    <div class="card-login">
+        <h2>Criar Conta 👾</h2>
+
+        <form id="form-registro">
+            <div class="campo">
+                <input type="text" id="nome" placeholder="Nome de Usuário" required>
+            </div>
+
+            <div class="campo">
+                <input type="email" id="email" placeholder="E-mail" required>
+            </div>
+
+            <div class="campo">
+                <input type="password" id="senha" placeholder="Senha" required>
+            </div>
+
+            <button type="submit">Cadastrar 🚀</button>
+        </form>
+
+        <p id="msg-status" class="status"></p>
+
+        <a href="login.html" class="link-menor">
+            Já tem conta? Faça login
+        </a>
+    </div>
+
+    <script src="registro.js"></script>
+</body>
+</html>
